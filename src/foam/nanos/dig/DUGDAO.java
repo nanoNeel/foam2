@@ -31,7 +31,9 @@ public class DUGDAO
 
   public void setDelegate(DAO delegate) {
     super.setDelegate(delegate);
-
+    if ( delegate == null ) {
+      return;
+    }
     delegate.select(new AbstractSink() {
       @Override
       public void put(Object obj, Detachable sub) {
@@ -53,9 +55,9 @@ public class DUGDAO
 
   protected void executeDUG(X x, DUG dug) {
     try {
-      dug.execute(Auth.sudo(x, dug.getOwner()));
+      dug.execute(Auth.sudo(getX(), dug.getOwner()));
     } catch (Throwable t) {
-      Logger logger = (Logger) x.get("logger");
+      Logger logger = (Logger) getX().get("logger");
       logger.error(DUGDAO.class, "Error executing DUG", dug.getId(), t);
     }
   }

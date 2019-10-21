@@ -14,6 +14,7 @@ foam.CLASS({
     'foam.dao.DAO',
     'foam.dao.HTTPSink',
     'foam.lib.json.Outputter',
+    'foam.mlang.MLang',
     'foam.nanos.logger.Logger',
     'static foam.lib.json.OutputterMode.NETWORK'
   ],
@@ -70,6 +71,15 @@ foam.CLASS({
       name: 'url',
       label: 'URL',
       displayWidth: 100
+    },
+    {
+      class: 'foam.mlang.predicate.PredicateProperty',
+      name: 'predicate'
+      // javaFactory: `
+      // return MLang.OR(
+      //   MLang.INSTANCE_OF(net.nanopay.tx.cico.CITransaction.class),
+      //   MLang.INSTANCE_OF(net.nanopay.tx.cico.COTransaction.class)
+      // );`
     }
   ],
 
@@ -86,7 +96,7 @@ foam.CLASS({
         try {
           DAO dao = (DAO) x.get(getDaoKey());
           // TODO: choose outputter based on format
-          dao.listen(new HTTPSink(getUrl(), foam.nanos.http.Format.JSON), null);
+          dao.listen(new HTTPSink(getUrl(), foam.nanos.http.Format.JSON), getPredicate());
         } catch (Throwable t) {
           ((Logger) x.get("logger")).error("DUG", "error executing DUG", t);
         }

@@ -160,7 +160,14 @@ if ( getDecorator() != null ) {
   // The decorator dao may be a proxy chain
   ProxyDAO proxy = (ProxyDAO) getDecorator();
   while ( proxy.getDelegate() != null ) {
-    proxy = (ProxyDAO) proxy.getDelegate();
+    DAO tmp = proxy.getDelegate();
+    if ( ! ( tmp instanceof ProxyDAO ) ) {
+      logger.error(String.format("Delegate %s was not an instance of ProxyDAO!", tmp.getClass().getSimpleName()));
+      System.exit(1);
+    } else {
+      logger.info(String.format("Adding decorator %s.", tmp.getClass().getSimpleName()));
+    }
+    proxy = (ProxyDAO) tmp;
   }
   proxy.setDelegate(delegate);
   delegate = (ProxyDAO) getDecorator();

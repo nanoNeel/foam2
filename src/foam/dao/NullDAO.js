@@ -34,7 +34,7 @@ _ = on["put"].pub([obj])
 return obj
       `,
       javaCode: `
-onPut(obj);
+onPut(obj, null);
 return obj;
       `,
     },

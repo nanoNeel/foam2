@@ -628,9 +628,10 @@ protected class DAOListener implements foam.core.Detachable {
     listeners.remove(this);
   }
 
-  public void put(foam.core.FObject obj) {
+  public void put(foam.core.FObject obj, foam.core.FObject old) {
     try {
       sink.put(obj, this);
+      sink.put(getX().put("NEW", obj).put("OLD", old), this);
     } catch (java.lang.Exception e) {
       detach();
     }
@@ -655,12 +656,12 @@ protected class DAOListener implements foam.core.Detachable {
 
 protected java.util.List<DAOListener> listeners_ = new java.util.concurrent.CopyOnWriteArrayList<DAOListener>();
 
-protected void onPut(foam.core.FObject obj) {
+protected void onPut(foam.core.FObject obj, foam.core.FObject old) {
   java.util.Iterator<DAOListener> iter = listeners_.iterator();
 
   while ( iter.hasNext() ) {
     DAOListener s = iter.next();
-    s.put(obj);
+    s.put(obj, old);
   }
 }
 

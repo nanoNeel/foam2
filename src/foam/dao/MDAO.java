@@ -95,9 +95,9 @@ public class MDAO
   public FObject put_(X x, FObject obj) {
     // Clone and freeze outside of lock to minimize time spent under lock
     obj = objIn(obj);
-
+    FObject oldValue = find_(x, obj);
     synchronized ( writeLock_ ) {
-      FObject oldValue = find_(x, obj);
+
       Object  state    = getState();
 
       if ( oldValue != null ) {
@@ -107,7 +107,7 @@ public class MDAO
       setState(index_.put(state, obj));
     }
 
-    onPut(obj);
+    onPut(obj, oldValue);
     return obj;
   }
 

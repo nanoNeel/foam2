@@ -349,10 +349,16 @@ foam.CLASS({
       },
       swiftCode: 'if predicate.f(obj) { delegate.put(obj, sub) }',
       javaCode: `
-        try {
-          if ( getPredicate().f(obj) ) getDelegate().put(obj, sub);
-        } catch (ClassCastException exp) {
+      try {
+        if ( getPredicate().f(obj) ) {
+          Object nu = obj;
+          if ( obj instanceof foam.core.X ) {
+            nu = ((foam.core.X) obj).get("NEW");
+          }
+          getDelegate().put(nu, sub);
         }
+      } catch (ClassCastException exp) {
+      }
       `
     },
     {

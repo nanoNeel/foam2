@@ -53,9 +53,9 @@ public class MapDAO
     }
     obj = obj.fclone();
     obj.freeze();
-    
+    FObject old = getData().get(key);
     getData().put(key, obj);
-    onPut(obj);
+    onPut(obj, old);
     
     return obj;
   }
